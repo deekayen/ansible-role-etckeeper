@@ -1,0 +1,21 @@
+---
+
+- name: configure etckeeper remote
+  command: "etckeeper vcs remote add -m gitlab git@{{ gitlab_fqdn }}:{{ gitlab_group }}/{{ inventory_hostname_short }}.git"
+  args:
+    chdir: /etc
+  become: true
+  ignore_errors: true
+
+- name: etckeeper initial commit
+  command: 'etckeeper commit "initial commit."'
+  args:
+    chdir: /etc
+    creates: /etc/.git/logs/refs/heads/master
+  become: true
+
+- name: etckeeper push
+  command: "git push -u gitlab master"
+  args:
+    chdir: /etc
+  become: true

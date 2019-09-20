@@ -1,0 +1,15 @@
+---
+
+etckeeper_ssh_key_bits: 3072
+
+gitlab_group: ''
+gitlab_issues_enabled: no
+gitlab_snippets_enabled: no
+gitlab_wiki_enabled: no
+gitlab_visibility: private
+
+
+gitlab_fqdn: gitlab.com
+gitlab_server_url: "https://{{ gitlab_fqdn }}"
+
+gitlab_ansible_token: ""

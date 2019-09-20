@@ -1,0 +1,104 @@
+---
+
+- debug:
+    var: gitlab_ansible_token
+    verbosity: 3
+
+- name: Check for a GitLab API token.
+  assert:
+    that:
+      - gitlab_ansible_token is defined
+      - gitlab_ansible_token | length > 1
+    fail_msg: "Set a GitLab API token to manage the GitLab repository."
+    success_msg: "GitLab API token set."
+  tags:
+    - always
+
+- name: "Create a {{ etckeeper_ssh_key_bits }}-bit SSH key for root in /root/.ssh/id_rsa."
+  user:
+    name: root
+    generate_ssh_key: yes
+    ssh_key_bits: "{{ etckeeper_ssh_key_bits }}"
+    ssh_key_file: .ssh/id_rsa
+
+- name: Download the root user public key.
+  fetch:
+    src: /root/.ssh/id_rsa.pub
+    dest: /tmp/.ssh
+
+- name: Install etckeeper.
+  yum:
+    name: etckeeper
+    state: present
+  tags:
+    - install
+
+- name: Setup git remote for etckeeper.
+  lineinfile:
+    path: /etc/etckeeper/etckeeper.conf
+    regexp: '^PUSH_REMOTE'
+    line: 'PUSH_REMOTE="gitlab"'
+  tags:
+    - configure
+
+- name: Initialize etckeeper.
+  command: etckeeper init
+  args:
+    chdir: /etc
+    creates: /etc/.etckeeper
+
+- name: Configure git identity username for upstream commit attribution.
+  git_config:
+    name: user.name
+    repo: /etc
+    scope: local
+    value: 'Ansible etckeeper'
+
+- name: Configure git identity email for upstream commit attribution.
+  git_config:
+    name: user.email
+    repo: /etc
+    scope: local
+    value: 'root@{{ ansible_fqdn }}'
+
+- name: Create GitLab project in group etckeeper.
+  gitlab_project:
+    server_url: "{{ gitlab_server_url }}"
+    api_token: "{{ gitlab_ansible_token }}"
+    name: "{{ inventory_hostname_short }}"
+    group: "{{ omit if gitlab_group | length == 0 or gitlab_group }}"
+    issues_enabled: "{{ gitlab_issues_enabled }}"
+    snippets_enabled: "{{ gitlab_snippets_enabled }}"
+    state: present
+    wiki_enabled: "{{ gitlab_wiki_enabled }}"
+    validate_certs: yes
+    visibility: "{{ gitlab_visibility }}"
+  connection: local
+  become: false
+  tags:
+    - configure
+  notify:
+    - configure etckeeper remote
+
+# What's your better idea?
+- name: Save the GitLab key to known_hosts.
+  command: "ssh-keyscan -t ecdsa -H {{ gitlab_fqdn }} >> /root/.ssh/known_hosts"
+  args:
+    creates: /root/.ssh/known_hosts
+
+- name: Create a server-specific deploy key.
+  gitlab_deploy_key:
+    api_url: "{{ gitlab_server_url }}"
+    api_token: "{{ gitlab_ansible_token }}"
+    can_push: yes
+    project: "etckeeper/{{ inventory_hostname_short }}"
+    key: "{{ lookup('file', '/tmp/.ssh/{{ inventory_hostname }}/root/.ssh/id_rsa.pub') }}"
+    title: "root@{{ inventory_hostname_short }}"
+    state: present
+  connection: local
+  become: false
+  tags:
+    - configure
+  notify:
+    - etckeeper initial commit
+    - etckeeper push
