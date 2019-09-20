@@ -16,8 +16,8 @@ install:
   - if [ "${ANSIBLE_VERSION}" = "latest" ]; then pip3 install -U ansible; else pip3 install -U ansible==${ANSIBLE_VERSION}; fi
   - pip install ansible-lint
   - pip install ansible-review
-  - ansible-galaxy install --force -r ansible-galaxy install geerlingguy.repo-epel
-  - ansible-galaxy install --force -r ansible-galaxy install git+https://github.com/deekayen/ansible-role-etckeeper.git,$TRAVIS_COMMIT
+  - ansible-galaxy install --force geerlingguy.repo-epel
+  - ansible-galaxy install --force git+https://github.com/deekayen/ansible-role-etckeeper.git,$TRAVIS_COMMIT
 
 before_script:
   - ansible --version
