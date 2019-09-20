@@ -17,7 +17,7 @@ install:
   - pip install ansible-lint
   - pip install ansible-review
   - ansible-galaxy install --force geerlingguy.repo-epel
-  - ansible-galaxy install --force git+https://github.com/deekayen/ansible-role-etckeeper.git,$TRAVIS_COMMIT
+  - ansible-galaxy install --force git+https://github.com/deekayen/ansible-role-etckeeper.git,${TRAVIS_COMMIT}
 
 before_script:
   - ansible --version
@@ -28,7 +28,7 @@ before_script:
 script:
   - git ls-files | grep yml | grep -v travis | xargs ansible-lint
   - git ls-files | grep -Ei '^[^[:punct:]].+.(yaml|yml)$' | xargs ansible-review -q
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check -e 'ansible_python_interpreter=/usr/bin/python3' -e 'version=$TRAVIS_COMMIT'
+  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check -e 'ansible_python_interpreter=/usr/bin/python3' -e 'version=${TRAVIS_COMMIT}'
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
