@@ -1,6 +1,8 @@
 etckeeper
 =========
 
+[![Build Status](https://travis-ci.org/deekayen/ansible-role-etckeeper.svg?branch=master)](https://travis-ci.org/deekayen/ansible-role-etckeeper)
+
 Install the [etckeeper](https://etckeeper.branchable.com) application, configure it, and have it push configuration archives to a remote GitLab repository.
 
 Requirements
