@@ -29,7 +29,7 @@ before_script:
 script:
   - git ls-files | grep yml | grep -v travis | xargs ansible-lint
   - git ls-files | grep -Ei '^[^[:punct:]].+.(yaml|yml)$' | xargs ansible-review -q
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check -e 'ansible_python_interpreter=/usr/bin/python3' -e 'version=${TRAVIS_COMMIT}'
+  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check -e 'ansible_python_interpreter=/usr/bin/python3'
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
