@@ -7,5 +7,4 @@
 
   roles:
     - src: git+https://github.com/deekayen/ansible-role-etckeeper.git
-      name: deekayen.etckeeper
       version: "{{ version }}"
