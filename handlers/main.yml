@@ -14,7 +14,7 @@
     creates: /etc/.git/logs/refs/heads/master
   become: true
 
-- name: etckeeper push
+- name: "etckeeper push" # noqa 303
   command: "git push -u gitlab master"
   args:
     chdir: /etc

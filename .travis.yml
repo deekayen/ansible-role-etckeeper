@@ -14,9 +14,9 @@ before_install:
 
 install:
   - sudo apt-get install -y ansible
-  - sudo ansible-galaxy install --force -r tests/requirements.yml
   - pip install ansible-lint
   - pip install ansible-review
+  - ansible-galaxy install --force -r tests/requirements.yml
 
 before_script:
   - ansible --version
