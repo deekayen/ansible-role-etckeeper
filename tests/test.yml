@@ -6,5 +6,4 @@
   become: true
 
   roles:
-    - src: git+https://github.com/deekayen/ansible-role-etckeeper.git
-      version: "{{ version }}"
+    - ansible-role-etckeeper
