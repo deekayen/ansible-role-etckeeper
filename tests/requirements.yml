@@ -1,3 +1,4 @@
 ---
 
 - src: geerlingguy.repo-epel
+  name: geerlingguy.repo-epel
