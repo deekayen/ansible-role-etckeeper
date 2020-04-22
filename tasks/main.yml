@@ -27,7 +27,7 @@
     dest: /tmp/.ssh
 
 - name: Install etckeeper.
-  yum:
+  package:
     name: etckeeper
     state: present
   tags:
