@@ -5,6 +5,7 @@ galaxy_info:
   author: David Norman
   description: Archive etc configuration files using etckeeper.
 
+  github_branch: main
   issue_tracker_url: https://github.com/deekayen/ansible-role-etckeeper/issues
 
   license: BSD-3-Clause
@@ -19,4 +20,4 @@ galaxy_info:
     - etckeeper
 
 dependencies:
-- src: geerlingguy.repo-epel
+  - src: geerlingguy.repo-epel
