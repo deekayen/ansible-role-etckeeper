@@ -15,6 +15,11 @@
   tags:
     - always
 
+- name: Install ssh-keygen.
+  package:
+    name: openssh-clients
+    state: present
+
 - name: "Create a {{ etckeeper_ssh_key_bits }}-bit SSH key for root in /root/.ssh/id_rsa."
   user:
     name: root
