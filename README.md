@@ -1,7 +1,7 @@
 etckeeper
 =========
 
-[![Build Status](https://travis-ci.org/deekayen/ansible-role-etckeeper.svg?branch=main)](https://travis-ci.org/deekayen/ansible-role-etckeeper) [![Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive)
+[![CI](https://github.com/deekayen/ansible-role-etckeeper/workflows/CI/badge.svg)](https://github.com/deekayen/ansible-role-etckeeper/actions?query=workflow%3ACI) [![Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](https://www.repostatus.org/badges/latest/inactive.svg)](https://www.repostatus.org/#inactive)
 
 Install the [etckeeper](https://etckeeper.branchable.com) application, configure it, and have it push configuration archives to a remote GitLab repository.
 
