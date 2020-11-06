@@ -19,6 +19,8 @@
   package:
     name: openssh-clients
     state: present
+  tags:
+    - install
 
 - name: "Create a {{ etckeeper_ssh_key_bits }}-bit SSH key for root in /root/.ssh/id_rsa."
   user:
