@@ -1,0 +1,28 @@
+---
+- name: Assert etckeeper_ssh_key_bits is a sane key size.
+  ansible.builtin.assert:
+    that:
+      - etckeeper_ssh_key_bits | int >= 2048
+    fail_msg: "etckeeper_ssh_key_bits must be at least 2048, got: {{ etckeeper_ssh_key_bits }}"
+    quiet: true
+
+- name: Assert gitlab_visibility is a valid GitLab visibility level.
+  ansible.builtin.assert:
+    that:
+      - gitlab_visibility in ['private', 'internal', 'public']
+    fail_msg: "gitlab_visibility must be private, internal, or public, got: {{ gitlab_visibility }}"
+    quiet: true
+
+- name: Assert gitlab_server_url is an HTTP(S) URL.
+  ansible.builtin.assert:
+    that:
+      - gitlab_server_url is match('^https?://')
+    fail_msg: "gitlab_server_url must start with http:// or https://, got: {{ gitlab_server_url }}"
+    quiet: true
+
+- name: Warn when no GitLab API token is set.
+  ansible.builtin.debug:
+    msg: >-
+      gitlab_ansible_token is empty; skipping GitLab project and deploy key
+      setup. etckeeper will only commit locally.
+  when: gitlab_ansible_token | length <= 1

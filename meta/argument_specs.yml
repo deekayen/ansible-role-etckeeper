@@ -1,0 +1,64 @@
+---
+argument_specs:
+  main:
+    short_description: Archive etc configuration files using etckeeper.
+    description:
+      - Installs etckeeper, initializes a git repository in /etc, and
+        optionally creates a per-host GitLab project with a deploy key so
+        each host can push its /etc history upstream.
+    author:
+      - David Norman
+    options:
+      etckeeper_ssh_key_bits:
+        type: int
+        default: 3072
+        description: Number of bits in the SSH key generated for root.
+
+      gitlab_group:
+        type: str
+        default: ""
+        description: >-
+          GitLab group in which to create the per-host project. When empty,
+          the project is created in the token owner's personal namespace.
+
+      gitlab_issues_enabled:
+        type: bool
+        default: false
+        description: Enable the issue tracker on the created GitLab project.
+
+      gitlab_snippets_enabled:
+        type: bool
+        default: false
+        description: Enable snippets on the created GitLab project.
+
+      gitlab_wiki_enabled:
+        type: bool
+        default: false
+        description: Enable the wiki on the created GitLab project.
+
+      gitlab_visibility:
+        type: str
+        default: private
+        choices:
+          - private
+          - internal
+          - public
+        description: Visibility of the created GitLab project.
+
+      gitlab_fqdn:
+        type: str
+        default: gitlab.com
+        description: Hostname of the GitLab server.
+
+      gitlab_server_url:
+        type: str
+        default: "https://{{ gitlab_fqdn }}"
+        description: Base URL of the GitLab API.
+
+      gitlab_ansible_token:
+        type: str
+        default: ""
+        description: >-
+          GitLab API token used to create the project and deploy key. When
+          empty, the GitLab remote setup is skipped and etckeeper only
+          commits locally.

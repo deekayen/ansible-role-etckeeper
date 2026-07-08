@@ -1,21 +1,24 @@
 ---
-
-- name: configure etckeeper remote
-  command: "etckeeper vcs remote add -m gitlab git@{{ gitlab_fqdn }}:{{ gitlab_group }}/{{ inventory_hostname_short }}.git"
+- name: Configure etckeeper remote.
+  ansible.builtin.command: "etckeeper vcs remote add -m gitlab git@{{ gitlab_fqdn }}:{{ gitlab_group }}/{{ inventory_hostname_short }}.git"
   args:
     chdir: /etc
   become: true
-  ignore_errors: true
+  register: etckeeper_remote_add
+  changed_when: etckeeper_remote_add.rc == 0
+  failed_when: false
 
-- name: etckeeper initial commit
-  command: 'etckeeper commit "initial commit."'
+- name: Run etckeeper initial commit.
+  ansible.builtin.command: 'etckeeper commit "initial commit."'
   args:
     chdir: /etc
     creates: /etc/.git/logs/refs/heads/master
   become: true
 
-- name: "etckeeper push" # noqa 303
-  command: "git push -u gitlab master"
+- name: Push etckeeper to the git remote.  # noqa: command-instead-of-module
+  ansible.builtin.command: "git push -u gitlab master"
   args:
     chdir: /etc
   become: true
+  register: etckeeper_push
+  changed_when: etckeeper_push.rc == 0

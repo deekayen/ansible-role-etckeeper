@@ -1,0 +1,25 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  tasks:
+    - name: Gather installed package facts.
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Assert etckeeper is installed.
+      ansible.builtin.assert:
+        that:
+          - "'etckeeper' in ansible_facts.packages"
+        fail_msg: etckeeper package is not installed.
+
+    - name: Stat the etckeeper metadata directory.
+      ansible.builtin.stat:
+        path: /etc/.etckeeper
+      register: etckeeper_meta
+
+    - name: Assert etckeeper has been initialized in /etc.
+      ansible.builtin.assert:
+        that:
+          - etckeeper_meta.stat.exists
+        fail_msg: /etc/.etckeeper does not exist; etckeeper init did not run.

@@ -1,3 +1,0 @@
----
-
-gitlab_server_url: "https://{{ gitlab_fqdn }}"
