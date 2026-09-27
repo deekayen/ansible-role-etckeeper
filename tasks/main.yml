@@ -56,7 +56,7 @@
     name: user.email
     repo: /etc
     scope: local
-    value: 'root@{{ ansible_fqdn }}'
+    value: 'root@{{ ansible_facts.fqdn }}'
 
 - name: Create GitLab project in group etckeeper.
   community.general.gitlab_project:
